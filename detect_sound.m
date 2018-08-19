@@ -5,13 +5,14 @@ settings;
 
 size_dt = 0:1/fs:1.2;
 r_senal = sin(0*size_dt);
-token = 0;
+token = 1;
 if token == 1
     ttl = 4;
     r_senal = sin(2*pi*(ttl4)*size_dt)+sin(2*pi*(ttl3)*size_dt)+sin(2*pi*(ttl2)*size_dt)+sin(2*pi*(ttl1)*size_dt); 
 end
 soundsc(r_senal,fs,16);
 pause(1.5);
+counter = 0;
 while true
     %===== Grabar
     tf = 1.5; % duracion de la grabacion (segs)
@@ -63,9 +64,17 @@ while true
     elseif ttl == 1
         r_senal = sin(0*size_dt);
     elseif ttl == 0
-        pause(3);
-        if token ==1
-            r_senal = sin(2*pi*(ttl4)*size_dt)+sin(2*pi*(ttl3)*size_dt)+sin(2*pi*(ttl2)*size_dt)+sin(2*pi*(ttl1)*size_dt); 
+        counter = counter+1;
+        if counter == 3 && token ==1
+            r_senal = sin(2*pi*(ttl4)*size_dt)+sin(2*pi*(ttl3)*size_dt)+sin(2*pi*(ttl2)*size_dt)+sin(2*pi*(ttl1)*size_dt);
+            soundsc(r_senal,fs,16);
+            pause(1.5);
+        elseif counter == 6 && token ==1
+            r_senal = sin(2*pi*(ttl4)*size_dt)+sin(2*pi*(ttl3)*size_dt)+sin(2*pi*(ttl2)*size_dt)+sin(2*pi*(ttl1)*size_dt);
+            soundsc(r_senal,fs,16);
+            pause(1.5);
+        elseif counter == 9 && token ==1
+            break;
         end
     end
     ttl
