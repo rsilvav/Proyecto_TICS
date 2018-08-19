@@ -17,10 +17,10 @@ dif = 100; % diferencia entre cada valor del pixel
 img='twitter.png';
 p2f = @(px, b, d) px*d + b;
 f2p = @(f, bf, d) round((f-bf)/d);
-ttl1 = 8000;
+ttl1 = 9000;
 ttl2 = 10000;
-ttl3 = 12000;
-ttl4 = 14000;
+ttl3 = 11000;
+ttl4 = 12000;
 %========= FILTROS
 w1=[(ttl1-100)/(fs/2) (ttl1+100)/(fs/2)];
 w2=[(ttl2-100)/(fs/2) (ttl2+100)/(fs/2)];
