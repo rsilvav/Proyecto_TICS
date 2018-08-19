@@ -3,7 +3,7 @@ clear
 clc
 settings;
 
-size_dt = 0:1/fs:1.1;
+size_dt = 0:1/fs:1.2;
 r_senal = sin(0*size_dt);
 token = 0;
 if token == 1
@@ -12,7 +12,7 @@ if token == 1
 end
 soundsc(r_senal,fs,16);
 pause(1.5);
-%while true
+while true
     %===== Grabar
     tf = 1.5; % duracion de la grabacion (segs)
     recorder = audiorecorder(fs, 16, 1);
@@ -26,24 +26,27 @@ pause(1.5);
     f = fs/2*linspace(0,1,NFFT/2+1);
     a_fft = abs(Y(1:NFFT/2+1));
     ttl = 0;
-    i_ttl1 = find(abs(f-ttl1)<0.15);
-    i_ttl2 = find(abs(f-ttl2)<0.15);
-    i_ttl3 = find(abs(f-ttl3)<0.15);
-    i_ttl4 = find(abs(f-ttl4)<0.15);
-    if a_fft(i_ttl1) >= mean(a_fft(i_ttl1-10:end))%+std(a_fft)
+    [c1 i_ttl1] = min(abs(f-ttl1));
+    [c2 i_ttl2] = min(abs(f-ttl2));
+    [c3 i_ttl3] = min(abs(f-ttl3));
+    [c4 i_ttl4] = min(abs(f-ttl4));
+     %= find(abs(f-ttl1)<0.15);
+    %i_ttl2 = find(abs(f-ttl2)<0.15);
+    %i_ttl3 = find(abs(f-ttl3)<0.15);
+    %i_ttl4 = find(abs(f-ttl4)<0.15);
+    if a_fft(i_ttl1) >= mean(a_fft(i_ttl1-10:end))+2*std(a_fft(i_ttl1-10:end))
         ttl = ttl + 1;
     end
-    if a_fft(i_ttl2) >= mean(a_fft(i_ttl1-10:end))%+std(a_fft)
+    if a_fft(i_ttl2) >= mean(a_fft(i_ttl1-10:end))+2*std(a_fft(i_ttl1-10:end))
         ttl = ttl + 1;
     end
-    if a_fft(i_ttl3) >= mean(a_fft(i_ttl1-10:end))%+std(a_fft)
+    if a_fft(i_ttl3) >= mean(a_fft(i_ttl1-10:end))+2*std(a_fft(i_ttl1-10:end))
         ttl = ttl + 1;
     end
-    if a_fft(i_ttl4) >= mean(a_fft(i_ttl1-10:end))%+std(a_fft)
+    if a_fft(i_ttl4) >= mean(a_fft(i_ttl1-10:end))+2*std(a_fft(i_ttl1-10:end))
         ttl = ttl + 1;
     end
 
-    outhi = senal;
     Yx = Y;
     xa_fft = a_fft;
     
@@ -66,9 +69,11 @@ pause(1.5);
         end
     end
     ttl
-    soundsc(r_senal,fs,16);
-    pause(1.5);
-%end
+    if ttl>1
+        soundsc(r_senal,fs,16);
+        pause(1.5);
+    end
+end
 %======== PLOT FFT
 %Yxx = fft(r_senal, NFFT)/(length(r_senal));
 
