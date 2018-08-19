@@ -2,7 +2,16 @@ close all
 clear
 clc
 settings;
-while true
+
+size_dt = 0:1/fs:1.5;
+token = 1;
+if token == 1
+    ttl = 4;
+    r_senal = sin(2*pi*(ttl4)*size_dt)+sin(2*pi*(ttl3)*size_dt)+sin(2*pi*(ttl2)*size_dt)+sin(2*pi*(ttl1)*size_dt); 
+end
+soundsc(r_senal,fs,16);
+pause(1);
+while ttl>1
     %===== Grabar
     tf = 2; % duracion de la grabacion (segs)
     recorder = audiorecorder(fs, 16, 1);
@@ -36,7 +45,7 @@ while true
     outhi = senal;
     Yx = Y;
     xa_fft = a_fft;
-    size_dt = 0:1/fs:1.5;
+    
     if ttl == 4
         Yx(i_ttl1-10:i_ttl1+10) = 0;
         r_senal = sin(2*pi*(ttl4)*size_dt)+sin(2*pi*(ttl3)*size_dt)+sin(2*pi*(ttl2)*size_dt); 
@@ -50,9 +59,10 @@ while true
         r_senal = sin(0*size_dt);
     end
     ttl
-
-    soundsc(r_senal,fs,16);
 end
+
+
+
 %======== PLOT FFT
 %Yxx = fft(r_senal, NFFT)/(length(r_senal));
 
