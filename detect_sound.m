@@ -3,9 +3,9 @@ clear
 clc
 settings;
 
-size_dt = 0:1/fs:1.2;
+size_dt = 0:1/fs:1;
 r_senal = sin(0*size_dt);
-token = 1;
+token = 0;
 if token == 1
     ttl = 4;
     r_senal = sin(2*pi*(ttl4)*size_dt)+sin(2*pi*(ttl3)*size_dt)+sin(2*pi*(ttl2)*size_dt)+sin(2*pi*(ttl1)*size_dt); 
@@ -19,6 +19,7 @@ while true
     recorder = audiorecorder(fs, 16, 1);
     %set(recorder,'TimerPeriod',1,'TimerFcn',{@audioTimer});
     recordblocking(recorder, tf);
+    pause(0.5);
     senal = recorder.getaudiodata;
     %======== PLOT FFT
     frames_dim = length(senal);
@@ -47,24 +48,32 @@ while true
     if a_fft(i_ttl4) >= mean(a_fft(i_ttl1-10:end))+2*std(a_fft(i_ttl1-10:end))
         ttl = ttl + 1;
     end
-
+    disp(['ttl recibido = ' num2str(ttl)])
     Yx = Y;
     xa_fft = a_fft;
     
     r_senal = sin(0*size_dt);
     if ttl == 4
-        Yx(i_ttl1-10:i_ttl1+10) = 0;
+        %Yx(i_ttl1-10:i_ttl1+10) = 0;
+        ttl = ttl - 1;
+        disp(['ttl enviado = ' num2str(ttl)])
         r_senal = sin(2*pi*(ttl4)*size_dt)+sin(2*pi*(ttl3)*size_dt)+sin(2*pi*(ttl2)*size_dt); 
     elseif ttl == 3
-        Yx(i_ttl2-10:i_ttl1+10) = 0;
+        %Yx(i_ttl2-10:i_ttl2+10) = 0;
+        ttl = ttl - 1;
+        disp(['ttl enviado = ' num2str(ttl)])
         r_senal = sin(2*pi*(ttl4)*size_dt)+sin(2*pi*(ttl3)*size_dt);
     elseif ttl == 2
-        Yx(i_ttl3-10:i_ttl1+10) = 0;
+        %Yx(i_ttl3-10:i_ttl3+10) = 0;
+        ttl = ttl - 1;
+        disp(['ttl enviado = ' num2str(ttl)])
         r_senal = sin(2*pi*(ttl4)*size_dt);
     elseif ttl == 1
+        ttl = ttl - 1;
+        disp(['ttl enviado = ' num2str(ttl)])
         r_senal = sin(0*size_dt);
     elseif ttl == 0
-        counter = counter+1;
+        counter = counter+1
         if counter == 3 && token ==1
             r_senal = sin(2*pi*(ttl4)*size_dt)+sin(2*pi*(ttl3)*size_dt)+sin(2*pi*(ttl2)*size_dt)+sin(2*pi*(ttl1)*size_dt);
             soundsc(r_senal,fs,16);
@@ -77,8 +86,7 @@ while true
             break;
         end
     end
-    ttl
-    if ttl>1
+    if ttl>=1
         soundsc(r_senal,fs,16);
         pause(1.5);
     end
