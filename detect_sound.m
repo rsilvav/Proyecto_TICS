@@ -5,7 +5,7 @@ settings;
 
 size_dt = 0:1/fs:1;
 r_senal = sin(0*size_dt);
-token = 1;
+token = 0;
 direccion = [0 0 0 1];
 s_dir = senal_direccion(direccion,size_dt,ttl1,ttl2,ttl3,ttl4);
 if token == 1
@@ -30,70 +30,24 @@ while true
     Y = fft(senal, NFFT)/frames_dim;
     f = fs/2*linspace(0,1,NFFT/2+1);
     a_fft = abs(Y(1:NFFT/2+1));
-    ttl = 0;
-    r_dir = 0;
-    [c1 i_ttl1] = min(abs(f-ttl1));
-    [c2 i_ttl2] = min(abs(f-ttl2));
-    [c3 i_ttl3] = min(abs(f-ttl3));
-    [c4 i_ttl4] = min(abs(f-ttl4));
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    [c1 i_d1] = min(abs(f-ttl1+50));
-    [c2 i_d2] = min(abs(f-ttl2+50));
-    [c3 i_d3] = min(abs(f-ttl3+50));
-    [c4 i_d4] = min(abs(f-ttl4+50));
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    if a_fft(i_ttl1) >= mean(a_fft(i_ttl1-10:end))+2*std(a_fft(i_ttl1-10:end))
-        ttl = ttl + 1;
-    end
-    if a_fft(i_ttl2) >= mean(a_fft(i_ttl1-10:end))+2*std(a_fft(i_ttl1-10:end))
-        ttl = ttl + 1;
-    end
-    if a_fft(i_ttl3) >= mean(a_fft(i_ttl1-10:end))+2*std(a_fft(i_ttl1-10:end))
-        ttl = ttl + 1;
-    end
-    if a_fft(i_ttl4) >= mean(a_fft(i_ttl1-10:end))+2*std(a_fft(i_ttl1-10:end))
-        ttl = ttl + 1;
-    end
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
-    if a_fft(i_d1) >= mean(a_fft(i_ttl1-10:end))+2*std(a_fft(i_ttl1-10:end))
-        r_dir = r_dir+8;
-    end
-    if a_fft(i_d2) >= mean(a_fft(i_ttl1-10:end))+2*std(a_fft(i_ttl1-10:end))
-        r_dir = r_dir+4;
-    end
-    if a_fft(i_d3) >= mean(a_fft(i_ttl1-10:end))+2*std(a_fft(i_ttl1-10:end))
-        r_dir = r_dir+2;
-    end
-    if a_fft(i_d4) >= mean(a_fft(i_ttl1-10:end))+2*std(a_fft(i_ttl1-10:end))
-        r_dir = r_dir+1;
-    end
-    
-    disp(['ttl recibido = ' num2str(ttl) ' direccion ' num2str(r_dir)])
-    Yx = Y;
-    xa_fft = a_fft;
-    
+    [r_ttl r_dir] = get_ttl(f,a_fft,ttl1,ttl2,ttl3,ttl4);
+    disp(['ttl recibido = ' num2str(r_ttl) ' direccion = ' num2str(r_dir)])
+    s_ttl = r_ttl - 1;
     r_senal = sin(0*size_dt);
-    if ttl == 4
-        %Yx(i_ttl1-10:i_ttl1+10) = 0;
-        ttl = ttl - 1;
-        disp(['ttl enviado = ' num2str(ttl)])
+    if r_ttl == 4 && dir > 0
+        disp(['ttl enviado = ' num2str(s_ttl)])
         r_senal = sin(2*pi*(ttl4)*size_dt)+sin(2*pi*(ttl3)*size_dt)+sin(2*pi*(ttl2)*size_dt); 
-    elseif ttl == 3
-        %Yx(i_ttl2-10:i_ttl2+10) = 0;
-        ttl = ttl - 1;
-        disp(['ttl enviado = ' num2str(ttl)])
+    elseif r_ttl == 3 && r_dir > 0
+        disp(['ttl enviado = ' num2str(s_ttl)])
         r_senal = sin(2*pi*(ttl4)*size_dt)+sin(2*pi*(ttl3)*size_dt);
-    elseif ttl == 2
-        %Yx(i_ttl3-10:i_ttl3+10) = 0;
-        ttl = ttl - 1;
-        disp(['ttl enviado = ' num2str(ttl)])
+    elseif r_ttl == 2 && r_dir > 0
+        disp(['ttl enviado = ' num2str(s_ttl)])
         r_senal = sin(2*pi*(ttl4)*size_dt);
-    elseif ttl == 1
-        ttl = ttl - 1;
-        disp(['ttl enviado = ' num2str(ttl)])
+    elseif r_ttl == 1 && r_dir > 0
+        disp(['ttl enviado = ' num2str(s_ttl)])
         r_senal = sin(0*size_dt);
-    elseif ttl == 0
-        counter = counter+1
+    elseif r_ttl == 0 || r_dir == 0
+        counter = counter+1;
         if counter == 3 && token ==1
             r_senal = sin(2*pi*(ttl4)*size_dt)+sin(2*pi*(ttl3)*size_dt)+sin(2*pi*(ttl2)*size_dt)+sin(2*pi*(ttl1)*size_dt);
             soundsc(r_senal,fs,16);
@@ -106,7 +60,7 @@ while true
             break;
         end
     end
-    if ttl>=1
+    if r_ttl>1 && r_dir > 0 
         soundsc(r_senal+s_dir,fs,16);
         pause(1.5);
     end
