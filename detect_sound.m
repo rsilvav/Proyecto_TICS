@@ -2,11 +2,13 @@ close all
 clear
 clc
 settings;
+seflTest;
 
+umbral = amp;
 size_dt = 0:1/fs:1;
 r_senal = sin(0*size_dt);
 token = 0;
-direccion = [0 0 0 1];
+direccion = [1 0 0 0];
 s_dir = senal_direccion(direccion,size_dt,s1,s2,s3,s4);
 if token == 1
     ttl = 4;

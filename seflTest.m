@@ -18,8 +18,6 @@ NFFT = 2^nextpow2(frames_dim);
 Y = fft(senal, NFFT)/frames_dim;
 f = fs/2*linspace(0,1,NFFT/2+1);
 a_fft = abs(Y(1:NFFT/2+1));
-plot(f, 2*abs(Y(1:NFFT/2+1)));
-audiowrite('ttl.wav',r_senal+s_dir,fs);
 
 
 [c1 i_ttl1] = min(abs(f-ttl1));
