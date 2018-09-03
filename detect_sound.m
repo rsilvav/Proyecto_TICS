@@ -7,7 +7,7 @@ size_dt = 0:1/fs:1;
 r_senal = sin(0*size_dt);
 token = 0;
 direccion = [0 0 0 1];
-s_dir = senal_direccion(direccion,size_dt,ttl1,ttl2,ttl3,ttl4);
+s_dir = senal_direccion(direccion,size_dt,s1,s2,s3,s4);
 if token == 1
     ttl = 4;
     r_senal = sin(2*pi*(ttl4)*size_dt)+sin(2*pi*(ttl3)*size_dt)+sin(2*pi*(ttl2)*size_dt)+sin(2*pi*(ttl1)*size_dt); 
@@ -16,7 +16,7 @@ if token == 1
 end
 
 counter = 0;
-% while true
+ while true
     %===== Grabar
     tf = 1.5; % duracion de la grabacion (segs)
     recorder = audiorecorder(fs, 16, 1);
@@ -34,7 +34,7 @@ counter = 0;
     disp(['ttl recibido = ' num2str(r_ttl) ' direccion = ' num2str(r_dir)])
     s_ttl = r_ttl - 1;
     r_senal = sin(0*size_dt);
-    if r_ttl == 4 && dir > 0
+    if r_ttl == 4 && r_dir > 0
         disp(['ttl enviado = ' num2str(s_ttl)])
         r_senal = sin(2*pi*(ttl4)*size_dt)+sin(2*pi*(ttl3)*size_dt)+sin(2*pi*(ttl2)*size_dt); 
     elseif r_ttl == 3 && r_dir > 0
@@ -48,23 +48,24 @@ counter = 0;
         r_senal = sin(0*size_dt);
     elseif r_ttl == 0 || r_dir == 0
         counter = counter+1;
+        %break;
         if counter == 3 && token ==1
             r_senal = sin(2*pi*(ttl4)*size_dt)+sin(2*pi*(ttl3)*size_dt)+sin(2*pi*(ttl2)*size_dt)+sin(2*pi*(ttl1)*size_dt);
-            soundsc(r_senal,fs,16);
+            soundsc(r_senal+s_dir,fs,16);
             pause(1.5);
         elseif counter == 6 && token ==1
             r_senal = sin(2*pi*(ttl4)*size_dt)+sin(2*pi*(ttl3)*size_dt)+sin(2*pi*(ttl2)*size_dt)+sin(2*pi*(ttl1)*size_dt);
-            soundsc(r_senal,fs,16);
+            soundsc(r_senal+s_dir,fs,16);
             pause(1.5);
         elseif counter == 9 && token ==1
-%             break;
+             break;
         end
     end
     if r_ttl>1 && r_dir > 0 
         soundsc(r_senal+s_dir,fs,16);
         pause(1.5);
     end
-% end
+ end
 %======== PLOT FFT
 %Yxx = fft(r_senal, NFFT)/(length(r_senal));
 
