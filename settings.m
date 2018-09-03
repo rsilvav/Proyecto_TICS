@@ -17,17 +17,12 @@ dif = 100; % diferencia entre cada valor del pixel
 img='twitter.png';
 p2f = @(px, b, d) px*d + b;
 f2p = @(f, bf, d) round((f-bf)/d);
-ttl1 = 9000;
-ttl2 = 10000;
-ttl3 = 11000;
-ttl4 = 12000;
-%========= FILTROS
-w1=[(ttl1-100)/(fs/2) (ttl1+100)/(fs/2)];
-w2=[(ttl2-100)/(fs/2) (ttl2+100)/(fs/2)];
-w3=[(ttl3-100)/(fs/2) (ttl3+100)/(fs/2)];
-w4=[(ttl4-100)/(fs/2) (ttl4+100)/(fs/2)];
-n=50;
-b1=fir1(n,w1,'stop','noscale');
-b2=fir1(n,w2,'stop');
-b3=fir1(n,w3,'stop');
-b4=fir1(n,w4,'stop');
+ttl1 = 8100;
+ttl2 = 8400;
+ttl3 = 8700;
+ttl4 = 9100;
+s1=5000;
+s2=5250;
+s3=5500;
+s4=5750;
+
