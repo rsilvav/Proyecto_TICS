@@ -16,7 +16,7 @@ if token == 1
 end
 
 counter = 0;
-while true
+% while true
     %===== Grabar
     tf = 1.5; % duracion de la grabacion (segs)
     recorder = audiorecorder(fs, 16, 1);
@@ -30,7 +30,7 @@ while true
     Y = fft(senal, NFFT)/frames_dim;
     f = fs/2*linspace(0,1,NFFT/2+1);
     a_fft = abs(Y(1:NFFT/2+1));
-    [r_ttl r_dir] = get_ttl(f,a_fft,ttl1,ttl2,ttl3,ttl4);
+    [r_ttl r_dir] = get_ttl(f,a_fft,ttl1,ttl2,ttl3,ttl4,s1,s2,s3,s4);
     disp(['ttl recibido = ' num2str(r_ttl) ' direccion = ' num2str(r_dir)])
     s_ttl = r_ttl - 1;
     r_senal = sin(0*size_dt);
@@ -57,14 +57,14 @@ while true
             soundsc(r_senal,fs,16);
             pause(1.5);
         elseif counter == 9 && token ==1
-            break;
+%             break;
         end
     end
     if r_ttl>1 && r_dir > 0 
         soundsc(r_senal+s_dir,fs,16);
         pause(1.5);
     end
-end
+% end
 %======== PLOT FFT
 %Yxx = fft(r_senal, NFFT)/(length(r_senal));
 
