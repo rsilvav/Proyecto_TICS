@@ -1,7 +1,7 @@
 settings;
-size_dt = 0:1/fs:15*info_size_f;
+size_dt = 0:1/fs:5*info_size_f;
 
-direccion = [1 1 1 1];
+direccion = [0 1 0 0];
 s_dir = senal_direccion(direccion,size_dt,s1,s2,s3,s4);
 r_senal = sin(2*pi*(ttl4)*size_dt)+sin(2*pi*(ttl3)*size_dt)+sin(2*pi*(ttl2)*size_dt)+sin(2*pi*(ttl1)*size_dt); 
 
